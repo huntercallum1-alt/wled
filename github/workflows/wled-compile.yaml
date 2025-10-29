@@ -24,16 +24,17 @@ jobs:
       run: |
         rm -rf /tmp/WLEDtemp/* || true
         mkdir -p /tmp/WLEDtemp
-        wget https://api.github.com/repos/MoonModules/WLED-MM/zipball/v0.14.1.0.0 -O /tmp/WLEDtemp/mm.zip
+        wget https://github.com/wled/WLED/archive/refs/heads/main.zip -O /tmp/WLEDtemp/mm.zip
         unzip /tmp/WLEDtemp/mm.zip -d /tmp/WLEDtemp
         find /tmp/WLEDtemp -maxdepth 1 -mindepth 1 -name "*" -type d >> /tmp/WLEDtemp/wledfoldername
         cd `cat /tmp/WLEDtemp/wledfoldername`
         npm install
         echo '[env:custom_build]' >>platformio.ini
-        echo 'extends = env:esp8266_2m' >>platformio.ini
-        echo 'build_flags = ${env:esp8266_2m.build_flags} -D USERMOD_ANALOG_CLOCK -D USERMOD_ROTARY_ENCODER_UI -D USERMOD_FOUR_LINE_DISPLAY -D USERMOD_FOUR_LINE_DISPLAY -D USERMOD_INTERNAL_TEMPERATURE' >>platformio.ini
+        echo 'extends = env:nodemcuv2' >>platformio.ini
+        echo 'build_flags = ${env:nodemcuv2.build_flags} ${esp32.AR_build_flags} -D USERMOD_ANALOG_CLOCK -D USERMOD_ROTARY_ENCODER_UI -D USERMOD_FOUR_LINE_DISPLAY -D USERMOD_FOUR_LINE_DISPLAY -D USERMOD_INTERNAL_TEMPERATURE' >>platformio.ini
         echo 'lib_deps = ' >>platformio.ini
-        echo '  ${env:esp8266_2m.lib_deps}' >>platformio.ini
+        echo '  ${env:nodemcuv2.lib_deps}' >>platformio.ini
+        echo '  ${esp32.AR_lib_deps}' >>platformio.ini
         echo '  olikraus/U8g2@~2.34.4' >>platformio.ini
         echo '  Wire' >>platformio.ini
         echo '  olikraus/U8g2@~2.34.4' >>platformio.ini
