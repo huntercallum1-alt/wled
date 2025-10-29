@@ -24,14 +24,14 @@ jobs:
       run: |
         rm -rf /tmp/WLEDtemp/* || true
         mkdir -p /tmp/WLEDtemp
-        wget https://github.com/wled/WLED/archive/refs/heads/main.zip -O /tmp/WLEDtemp/mm.zip
+        wget https://api.github.com/repos/wled/WLED/zipball/v0.15.1 -O /tmp/WLEDtemp/mm.zip
         unzip /tmp/WLEDtemp/mm.zip -d /tmp/WLEDtemp
         find /tmp/WLEDtemp -maxdepth 1 -mindepth 1 -name "*" -type d >> /tmp/WLEDtemp/wledfoldername
         cd `cat /tmp/WLEDtemp/wledfoldername`
         npm install
         echo '[env:custom_build]' >>platformio.ini
         echo 'extends = env:nodemcuv2' >>platformio.ini
-        echo 'build_flags = ${env:nodemcuv2.build_flags} -D WLED_DEBUG -D WLED_ENABLE_MQTT -D WLED_ENABLE_WEBSOCKETS ${esp32.AR_build_flags} -D USERMOD_ANALOG_CLOCK -D USERMOD_ROTARY_ENCODER_UI -D USERMOD_FOUR_LINE_DISPLAY -D USERMOD_FOUR_LINE_DISPLAY -D USERMOD_INTERNAL_TEMPERATURE' >>platformio.ini
+        echo 'build_flags = ${env:nodemcuv2.build_flags} ${esp32.AR_build_flags} -D USERMOD_ANALOG_CLOCK -D USERMOD_ROTARY_ENCODER_UI -D USERMOD_FOUR_LINE_DISPLAY -D USERMOD_FOUR_LINE_DISPLAY -D USERMOD_INTERNAL_TEMPERATURE' >>platformio.ini
         echo 'lib_deps = ' >>platformio.ini
         echo '  ${env:nodemcuv2.lib_deps}' >>platformio.ini
         echo '  ${esp32.AR_lib_deps}' >>platformio.ini
